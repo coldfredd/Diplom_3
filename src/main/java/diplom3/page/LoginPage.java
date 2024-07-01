@@ -1,5 +1,6 @@
 package diplom3.page;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -21,13 +22,14 @@ public class LoginPage {
     public LoginPage(WebDriver webDriver) {
         this.webDriver = webDriver;
     }
+    @Step("Click Registration link")
     public void clickRegistrationLink(){
         WebElement registrationLink = webDriver.findElement(registrationLinkLocator);
         registrationLink.click();
         new WebDriverWait(webDriver, ofSeconds(3))
                 .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(registrationWindowLocator));
     }
-
+    @Step("Login account with email and password")
     public void userLogin(String email, String password){
 
         WebElement emailInput = webDriver.findElement(emailInputLoginLocator);
@@ -36,6 +38,7 @@ public class LoginPage {
         WebElement passwordInput = webDriver.findElement(passwordInputLoginLocator);
         passwordInput.sendKeys(password);
     }
+    @Step("Click restore password link")
     public void clickRestorePasswordLink(){
         WebElement restorePasswordLink = webDriver.findElement(restorePasswordLinkLocator);
         restorePasswordLink.click();
@@ -43,12 +46,14 @@ public class LoginPage {
                 .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(restorePasswordPageLocator));
     }
 
+    @Step("Click Enter Button")
     public void clickEnterButton(){
         WebElement enterButton = webDriver.findElement(enterButtonLocator);
         enterButton.click();
         new WebDriverWait(webDriver, ofSeconds(3))
                 .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(mainPageShowLocator));
     }
+    @Step("Check MainPage displayed")
     public boolean mainPageIsDisplayed(){
         new WebDriverWait(webDriver, ofSeconds(3))
                 .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(mainPageShowLocator));

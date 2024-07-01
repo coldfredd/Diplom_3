@@ -1,12 +1,11 @@
 package diplom3.page;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-
-import java.time.Duration;
 
 import static java.time.Duration.ofSeconds;
 
@@ -23,6 +22,7 @@ public class RegistrationPage {
         this.webDriver = webDriver;
     }
 
+    @Step("Registration user")
     public void userRegistration(String name,String email, String password){
         WebElement nameInput = webDriver.findElement(nameInputLocator);
         nameInput.sendKeys(name);
@@ -33,22 +33,25 @@ public class RegistrationPage {
         WebElement passwordInput = webDriver.findElement(passwordInputLocator);
         passwordInput.sendKeys(password);
     }
-
+    @Step("Click registration button")
     public void clickRegistrationButton(){
         WebElement registrationButton = webDriver.findElement(registrationButtonLocator);
         registrationButton.click();
     }
+    @Step("Click Login link")
     public void clickLoginLink(){
         WebElement loginLink = webDriver.findElement(loginLinkLocator);
         loginLink.click();
         new WebDriverWait(webDriver, ofSeconds(3))
                 .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(loginPageShowLocator));
     }
+    @Step("Check Login page displayed")
     public boolean loginPageIsDisplayed(){
         new WebDriverWait(webDriver, ofSeconds(3))
                 .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(loginPageShowLocator));
         return webDriver.findElement(loginPageShowLocator).isDisplayed();
     }
+    @Step("Check error text with incorrect password")
     public boolean showPasswordError() {
         new WebDriverWait(webDriver, ofSeconds(3))
                 .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(passwordErrorLocator));

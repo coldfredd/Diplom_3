@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 
+import static diplom3.config.RestConfig.HOST;
 import static junit.framework.TestCase.assertTrue;
 
 public class AccountProfileTest {
@@ -27,7 +28,7 @@ public class AccountProfileTest {
     @Before
     public void setup(){
         webDriver = WebDriverFactory.getWebDriver(BROWSER);
-        webDriver.get("https://stellarburgers.nomoreparties.site/");
+        webDriver.get(HOST);
         faker = new Faker();
         user = new User();
         user.setEmail(faker.internet().emailAddress());
@@ -41,102 +42,55 @@ public class AccountProfileTest {
     @Description("After authorization, login to your personal account")
     public void goAccountProfileTest(){
         MainPage mainPage = new MainPage(webDriver);
-        clickLoginButton(mainPage);
+        mainPage.clickLoginButton();
         LoginPage loginPage = new LoginPage(webDriver);
-        userLogin(loginPage);
-        clickEnterButton(loginPage);
-        clickLoginAccountProfileButton(mainPage);
-        checkAccountPageDisplayed(mainPage);
+        loginPage.userLogin(user.getEmail(),user.getPassword());
+        loginPage.clickEnterButton();
+        mainPage.clickLoginAccountProfileButton();
+        assertTrue(mainPage.loginAccountPageIsDisplayed());
     }
-
     @Test
     @DisplayName("Check the transition to the Constructor page from Account Profile")
     @Description("After authorization, open the Constructor page")
     public void goConstructorTest(){
         MainPage mainPage = new MainPage(webDriver);
-        clickLoginButton(mainPage);
+        mainPage.clickLoginButton();
         LoginPage loginPage = new LoginPage(webDriver);
-        userLogin(loginPage);
-        clickEnterButton(loginPage);
-        clickLoginAccountProfileButton(mainPage);
+        loginPage.userLogin(user.getEmail(),user.getPassword());
+        loginPage.clickEnterButton();
+        mainPage.clickLoginAccountProfileButton();
         AccountProfilePage accountProfilePage = new AccountProfilePage(webDriver);
-        clickConstructorButton(accountProfilePage);
-        checkMainPageDisplayed(accountProfilePage);
+        accountProfilePage.clickConstructorButton();
+        assertTrue(accountProfilePage.mainPageIsDisplayed());
     }
     @Test
     @DisplayName("Verify opening the main page when clicking on the logo")
     @Description("Click logo from Account Profile")
     public void clickLogoTest(){
         MainPage mainPage = new MainPage(webDriver);
-        clickLoginButton(mainPage);
+        mainPage.clickLoginButton();
         LoginPage loginPage = new LoginPage(webDriver);
-        userLogin(loginPage);
-        clickEnterButton(loginPage);
-        clickLoginAccountProfileButton(mainPage);
+        loginPage.userLogin(user.getEmail(),user.getPassword());
+        loginPage.clickEnterButton();
+        mainPage.clickLoginAccountProfileButton();
         AccountProfilePage accountProfilePage = new AccountProfilePage(webDriver);
-        clickLogoButton(accountProfilePage);
-        checkMainPageDisplayed(accountProfilePage);
+        accountProfilePage.clickLogoButton();
+        assertTrue(accountProfilePage.mainPageIsDisplayed());
     }
-
-
     @Test
     @DisplayName("Verification of logging out from the account.")
     @Description("Verify logging out using the 'Logout' button in the personal account.")
     public void logoutTest() {
         MainPage mainPage = new MainPage(webDriver);
-        clickLoginButton(mainPage);
+        mainPage.clickLoginButton();
         LoginPage loginPage = new LoginPage(webDriver);
-        userLogin(loginPage);
-        clickEnterButton(loginPage);
-        clickLoginAccountProfileButton(mainPage);
+        loginPage.userLogin(user.getEmail(),user.getPassword());
+        loginPage.clickEnterButton();
+        mainPage.clickLoginAccountProfileButton();
         AccountProfilePage accountProfilePage = new AccountProfilePage(webDriver);
-        clickExitButton(accountProfilePage);
-        checkLoginPageDisplayed(accountProfilePage);
-    }
-    @Step("Check Login page displayed")
-    private static void checkLoginPageDisplayed(AccountProfilePage accountProfilePage) {
+        accountProfilePage.clickExitButton();
         assertTrue(accountProfilePage.loginPageIsDisplayed());
     }
-
-    @Step("Click Exit button")
-    private static void clickExitButton(AccountProfilePage accountProfilePage) {
-        accountProfilePage.clickExitButton();
-    }
-
-    @Step("Check Account Page Displayed")
-    private static void checkAccountPageDisplayed(MainPage mainPage) {
-        assertTrue(mainPage.loginAccountPageIsDisplayed());
-    }
-    @Step("Click Account Profile button")
-    private static void clickLoginAccountProfileButton(MainPage mainPage) {
-        mainPage.clickLoginAccountProfileButton();
-    }
-    @Step("Click login button")
-    private static void clickLoginButton(MainPage mainPage) {
-        mainPage.clickLoginButton();
-    }
-    @Step("Login account with email and password")
-    private void userLogin(LoginPage loginPage) {
-        loginPage.userLogin(user.getEmail(), user.getPassword());
-    }
-    @Step("Click Enter Button")
-    private static void clickEnterButton(LoginPage loginPage) {
-        loginPage.clickEnterButton();
-    }
-    @Step("Check main page displayed")
-    private static void checkMainPageDisplayed(AccountProfilePage accountProfilePage) {
-        assertTrue(accountProfilePage.mainPageIsDisplayed());
-    }
-
-    @Step("Click Constructor button")
-    private static void clickConstructorButton(AccountProfilePage accountProfilePage) {
-        accountProfilePage.clickConstructorButton();
-    }
-    @Step("Click logo button")
-    private static void clickLogoButton(AccountProfilePage accountProfilePage) {
-        accountProfilePage.clickLogoButton();
-    }
-
     @After
     public void tearDown(){
         webDriver.quit();

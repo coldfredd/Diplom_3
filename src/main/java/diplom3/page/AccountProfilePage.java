@@ -1,5 +1,6 @@
 package diplom3.page;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -19,27 +20,32 @@ public class AccountProfilePage {
     public AccountProfilePage(WebDriver webDriver) {
         this.webDriver = webDriver;
     }
+    @Step("Click Exit button")
     public void clickExitButton(){
         WebElement exitButton = webDriver.findElement(exitAccountLocator);
         exitButton.click();
         new WebDriverWait(webDriver, ofSeconds(3))
                 .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(loginPageShowLocator));
     }
+    @Step("Check Login page displayed")
     public boolean loginPageIsDisplayed(){
         return webDriver.findElement(loginPageShowLocator).isDisplayed();
     }
+    @Step("Click logo button")
     public void clickLogoButton(){
         WebElement logoButton = webDriver.findElement(logoButtonLocator);
         logoButton.click();
         new WebDriverWait(webDriver, ofSeconds(3))
                 .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(mainPageShowFromProfileLocator));
     }
+    @Step("Click Constructor button")
     public void clickConstructorButton(){
         WebElement constructorButton = webDriver.findElement(constructorButtonLocator);
         constructorButton.click();
         new WebDriverWait(webDriver, ofSeconds(3))
                 .until(ExpectedConditions.visibilityOfAllElementsLocatedBy(mainPageShowFromProfileLocator));
     }
+    @Step("Check main page displayed")
     public boolean mainPageIsDisplayed(){
         return webDriver.findElement(mainPageShowFromProfileLocator).isDisplayed();
     }

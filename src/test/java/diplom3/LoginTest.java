@@ -18,6 +18,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 
+import static diplom3.config.RestConfig.HOST;
 import static junit.framework.TestCase.assertTrue;
 
 public class LoginTest {
@@ -30,7 +31,7 @@ public class LoginTest {
     @Before
     public void setup(){
         webDriver = WebDriverFactory.getWebDriver(BROWSER);
-        webDriver.get("https://stellarburgers.nomoreparties.site/");
+        webDriver.get(HOST);
         faker = new Faker();
         user = new User();
         user.setEmail(faker.internet().emailAddress());
@@ -44,22 +45,22 @@ public class LoginTest {
     @Description("Verification of logging in using the 'Sign In' button on the mainpage")
     public void loginMainPageTest(){
         MainPage mainPage = new MainPage(webDriver);
-        clickLoginAccountButton(mainPage);
+        mainPage.clickLoginAccountButton();
         LoginPage loginPage = new LoginPage(webDriver);
-        userLogin(loginPage);
-        clickEnterButton(loginPage);
-        checkMainPageDisplayed(loginPage);
+        loginPage.userLogin(user.getEmail(), user.getPassword());
+        loginPage.clickEnterButton();
+        assertTrue(loginPage.mainPageIsDisplayed());
     }
     @Test
     @DisplayName("Login to account from 'Personal Account'")
     @Description("Verification of logging in through the 'Personal Account' button")
     public void loginHeaderTest(){
         MainPage mainPage = new MainPage(webDriver);
-        clickLoginButton(mainPage);
+        mainPage.clickLoginButton();
         LoginPage loginPage = new LoginPage(webDriver);
-        userLogin(loginPage);
-        clickEnterButton(loginPage);
-        checkMainPageDisplayed(loginPage);
+        loginPage.userLogin(user.getEmail(), user.getPassword());
+        loginPage.clickEnterButton();
+        assertTrue(loginPage.mainPageIsDisplayed());
     }
 
     @Test
@@ -67,66 +68,29 @@ public class LoginTest {
     @Description("Verification of logging in through the button in the registration form")
     public void loginFromRegistrationTest(){
         MainPage mainPage = new MainPage(webDriver);
-        clickLoginButton(mainPage);
+        mainPage.clickLoginButton();
         LoginPage loginPage = new LoginPage(webDriver);
-        clickRegistrationLink(loginPage);
+        loginPage.clickRegistrationLink();
         RegistrationPage registrationPage = new RegistrationPage(webDriver);
-        clickLoginLink(registrationPage);
-        userLogin(loginPage);
-        clickEnterButton(loginPage);
-        checkMainPageDisplayed(loginPage);
+        registrationPage.clickLoginLink();
+        loginPage.userLogin(user.getEmail(), user.getPassword());
+        loginPage.clickEnterButton();
+        assertTrue(loginPage.mainPageIsDisplayed());
     }
     @Test
     @DisplayName("Login to account from Restore Password")
     @Description("Verification of logging in through the button in the password recovery form")
     public void loginFromRestorePasswordPageTest(){
         MainPage mainPage = new MainPage(webDriver);
-        clickLoginButton(mainPage);
+        mainPage.clickLoginButton();
         LoginPage loginPage = new LoginPage(webDriver);
-        clickRestorePasswordLink(loginPage);
-        RestorePasswordPage restorePasswordPage = new RestorePasswordPage(webDriver);
-        clickLoginLink(restorePasswordPage);
-        userLogin(loginPage);
-        clickEnterButton(loginPage);
-        checkMainPageDisplayed(loginPage);
-    }
-    @Step("Click login link")
-    private static void clickLoginLink(RestorePasswordPage restorePasswordPage) {
-        restorePasswordPage.clickLoginLink();
-    }
-    @Step("Click restore password link")
-    private static void clickRestorePasswordLink(LoginPage loginPage) {
         loginPage.clickRestorePasswordLink();
-    }
-    @Step("Check MainPage displayed")
-    private static void checkMainPageDisplayed(LoginPage loginPage) {
+        RestorePasswordPage restorePasswordPage = new RestorePasswordPage(webDriver);
+        restorePasswordPage.clickLoginLink();
+        loginPage.userLogin(user.getEmail(), user.getPassword());
+        loginPage.clickEnterButton();
         assertTrue(loginPage.mainPageIsDisplayed());
     }
-    @Step("Click enter button")
-    private static void clickEnterButton(LoginPage loginPage) {
-        loginPage.clickEnterButton();
-    }
-    @Step("Login user with email and password")
-    private void userLogin(LoginPage loginPage) {
-        loginPage.userLogin(user.getEmail(), user.getPassword());
-    }
-    @Step("Click login account button")
-    private static void clickLoginAccountButton(MainPage mainPage) {
-        mainPage.clickLoginAccountButton();
-    }
-    @Step("Click login button")
-    private static void clickLoginButton(MainPage mainPage) {
-        mainPage.clickLoginButton();
-    }
-    @Step("Click Login link")
-    private static void clickLoginLink(RegistrationPage registrationPage) {
-        registrationPage.clickLoginLink();
-    }
-    @Step("Click Registration link")
-    private static void clickRegistrationLink(LoginPage loginPage) {
-        loginPage.clickRegistrationLink();
-    }
-
     @After
     public void tearDown(){
         webDriver.quit();

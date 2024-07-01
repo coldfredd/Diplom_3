@@ -17,6 +17,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 
+import static diplom3.config.RestConfig.HOST;
 import static junit.framework.TestCase.assertTrue;
 
 public class RegistrationTest {
@@ -29,7 +30,7 @@ public class RegistrationTest {
     @Before
     public void setup(){
         webDriver = WebDriverFactory.getWebDriver(BROWSER);
-        webDriver.get("https://stellarburgers.nomoreparties.site/");
+        webDriver.get(HOST);
         faker = new Faker();
         user = new User();
         user.setEmail(faker.internet().emailAddress());
@@ -42,61 +43,27 @@ public class RegistrationTest {
     @Description("Verification of error message for incorrect password")
     public void incorrectPasswordTest(){
         MainPage mainPage = new MainPage(webDriver);
-        clickLoginButton(mainPage);
+        mainPage.clickLoginButton();
         LoginPage loginPage = new LoginPage(webDriver);
-        clickRegistrationLink(loginPage);
+        loginPage.clickRegistrationLink();
         RegistrationPage registrationPage = new RegistrationPage(webDriver);
-        userRegistrationIncorrectPassword(registrationPage);
-        clickRegistrationButton(registrationPage);
-        checkErrorPassword(registrationPage);
+        registrationPage.userRegistration(user.getName(), user.getEmail(), "asd");
+        registrationPage.clickRegistrationButton();
+        assertTrue(registrationPage.showPasswordError());
     }
     @Test
     @DisplayName("Successful registration")
     @Description("Verification of successful registration")
     public void registrationSuccessTest(){
         MainPage mainPage = new MainPage(webDriver);
-        clickLoginButton(mainPage);
+        mainPage.clickLoginButton();
         LoginPage loginPage = new LoginPage(webDriver);
-        clickRegistrationLink(loginPage);
+        loginPage.clickRegistrationLink();
         RegistrationPage registrationPage = new RegistrationPage(webDriver);
-        userRegistration(registrationPage);
-        clickRegistrationButton(registrationPage);
-        checkLoginPageDiaplsyed(registrationPage);
-    }
-    @Step("Check Login page displayed")
-    private static void checkLoginPageDiaplsyed(RegistrationPage registrationPage) {
+        registrationPage.userRegistration(user.getName(), user.getEmail(), user.getPassword());
+        registrationPage.clickRegistrationButton();
         assertTrue(registrationPage.loginPageIsDisplayed());
     }
-
-    @Step("Registration user")
-    private void userRegistration(RegistrationPage registrationPage) {
-        registrationPage.userRegistration(user.getName(), user.getEmail(),user.getPassword());
-    }
-
-    @Step("Check error text with incorrect password")
-    private static void checkErrorPassword(RegistrationPage registrationPage) {
-        assertTrue(registrationPage.showPasswordError());
-    }
-
-    @Step("Click registration button")
-    private static void clickRegistrationButton(RegistrationPage registrationPage) {
-        registrationPage.clickRegistrationButton();
-    }
-
-    @Step("Try registration user with incorrect password")
-    private void userRegistrationIncorrectPassword(RegistrationPage registrationPage) {
-        registrationPage.userRegistration(user.getName(),user.getEmail(),"1234");
-    }
-    @Step("Click Registration link")
-    private static void clickRegistrationLink(LoginPage loginPage) {
-        loginPage.clickRegistrationLink();
-    }
-
-    @Step("Click login button")
-    private static void clickLoginButton(MainPage mainPage) {
-        mainPage.clickLoginButton();
-    }
-
     @After
     public void tearDown(){
         webDriver.quit();
