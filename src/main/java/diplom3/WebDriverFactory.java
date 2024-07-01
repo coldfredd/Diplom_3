@@ -3,7 +3,6 @@ package diplom3;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
-import static diplom3.config.RestConfig.HOST;
 
 public class WebDriverFactory {
 

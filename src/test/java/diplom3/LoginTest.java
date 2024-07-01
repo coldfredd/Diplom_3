@@ -8,7 +8,6 @@ import diplom3.page.RegistrationPage;
 import diplom3.page.RestorePasswordPage;
 import diplom3.steps.UserSteps;
 import io.qameta.allure.Description;
-import io.qameta.allure.Step;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.filter.log.RequestLoggingFilter;
